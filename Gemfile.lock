@@ -188,6 +188,10 @@ GEM
     rspec-support (3.12.0)
     shoulda-matchers (5.0.0)
       activesupport (>= 5.2.0)
+    simple_token_authentication (1.18.1)
+      actionmailer (>= 3.2.6, < 8)
+      actionpack (>= 3.2.6, < 8)
+      devise (>= 3.2, < 6)
     sqlite3 (1.6.3-x86_64-darwin)
     thor (1.2.2)
     timeout (0.3.2)
@@ -214,6 +218,7 @@ DEPENDENCIES
   rails (~> 7.0.4)
   rspec-rails (~> 6.0.0)
   shoulda-matchers (~> 5.0.0)
+  simple_token_authentication
   sqlite3 (~> 1.4)
   tzinfo-data
 
