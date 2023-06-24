@@ -13,5 +13,5 @@ class Planet < ApplicationRecord
   validates :surface_water, presence: true, length: { maximum: 255 }
   validates :terrain, presence: true, length: { maximum: 255 }
 
-  def self.table_name = 'Planet'
+  def self.table_name = 'Planets'
 end

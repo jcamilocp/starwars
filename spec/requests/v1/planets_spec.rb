@@ -150,9 +150,8 @@ RSpec.describe 'V1::Planets', type: :request do
 
       it 'should delete the planet' do
         delete "/v1/planets/#{planets[0].id}"
-        payload = JSON.parse(response.body)
-        expect(payload['planet']).to be_empty
-        expect(response).to have_http_status(:ok)
+        expect(response.body).to be_empty
+        expect(response).to have_http_status(:no_content)
         expect(Planet.all.size).to eq(9)
       end
     end

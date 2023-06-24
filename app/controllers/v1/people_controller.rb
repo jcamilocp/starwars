@@ -47,7 +47,7 @@ class V1::PeopleController < ApplicationController
     @people = People.find(params[:id])
     @people.destroy
 
-    render json: { people: {} }, status: :ok
+    render json: {}, status: :no_content
   end
 
   private

@@ -147,9 +147,9 @@ RSpec.describe "V1::Films", type: :request do
 
       it 'should delete the film' do
         delete "/v1/films/#{films[0].id}"
-        payload = JSON.parse(response.body)
-        expect(payload['film']).to be_empty
-        expect(response).to have_http_status(:ok)
+        # payload = JSON.parse(response.body)
+        expect(response.body).to be_empty
+        expect(response).to have_http_status(:no_content)
         expect(Film.all.size).to eq(9)
       end
     end

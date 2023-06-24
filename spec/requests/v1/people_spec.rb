@@ -46,7 +46,7 @@ RSpec.describe "V1::People", type: :request do
   end
 
   describe 'GET /v1/people/:id' do
-    let!(:people) { create(:people) }
+    let!(:people) { create(:people, planet_id: planet.id) }
 
     describe 'with auth' do
       before { sign_in user }
@@ -115,7 +115,7 @@ RSpec.describe "V1::People", type: :request do
   end
 
   describe 'PUT /v1/people' do
-    let!(:people) { create(:people) }
+    let!(:people) { create(:people, planet_id: planet.id) }
 
     describe 'with auth' do
       before { sign_in user }
@@ -148,16 +148,16 @@ RSpec.describe "V1::People", type: :request do
   end
 
   describe 'DELETE /v1/people/:id' do
-    let!(:people) { create_list(:people, 10) }
+    let!(:people) { create_list(:people, 10, planet_id: planet.id) }
 
     describe 'with auth' do
       before { sign_in user }
 
       it 'should delete the people' do
         delete "/v1/people/#{people[0].id}"
-        payload = JSON.parse(response.body)
-        expect(payload['people']).to be_empty
-        expect(response).to have_http_status(:ok)
+        # payload = JSON.parse(response.body)
+        expect(response.body).to be_empty
+        expect(response).to have_http_status(:no_content)
         expect(People.all.size).to eq(9)
       end
     end

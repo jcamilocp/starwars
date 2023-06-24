@@ -47,7 +47,7 @@ class V1::PlanetsController < ApplicationController
     @planet = Planet.find(params[:id])
     @planet.destroy
 
-    render json: { planet: {} }, status: :ok
+    render json: {}, status: :no_content
   end
 
   private

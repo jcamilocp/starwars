@@ -8,6 +8,5 @@ FactoryBot.define do
     height { Faker::Lorem.sentence(word_count: 2) }
     mass { Faker::Lorem.sentence(word_count: 2) }
     skin_color { Faker::Lorem.sentence(word_count: 2) }
-    planet_id nil
   end
 end

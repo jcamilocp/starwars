@@ -47,7 +47,7 @@ class V1::FilmsController < ApplicationController
     @film = Film.find(params[:id])
     @film.destroy
 
-    render json: { film: {} }, status: :ok
+    render json: {}, status: :no_content
   end
 
   private

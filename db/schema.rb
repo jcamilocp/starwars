@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_23_142331) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_24_142544) do
   create_table "Film", force: :cascade do |t|
     t.text "title"
     t.integer "episode_id"
@@ -29,7 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_23_142331) do
 # Could not dump table "People" because of following StandardError
 #   Unknown type '' for column 'planet_id'
 
-  create_table "planet", force: :cascade do |t|
+  create_table "Planets", force: :cascade do |t|
     t.text "name"
     t.text "diameter"
     t.text "rotation_period"
@@ -58,6 +58,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_23_142331) do
   add_foreign_key "Film_People", "Film", column: "film_id"
   add_foreign_key "Film_People", "People", column: "people_id"
   add_foreign_key "Film_Planet", "Film", column: "film_id"
-  add_foreign_key "Film_Planet", "planet"
-  add_foreign_key "People", "planet"
+  add_foreign_key "Film_Planet", "Planets", column: "planet_id"
+  add_foreign_key "People", "Planets", column: "planet_id"
 end
