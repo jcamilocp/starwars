@@ -6,5 +6,7 @@ Rails.application.routes.draw do
       post 'sign_up', to: 'registrations#create'
       post 'login', to: 'sessions#create'
     end
+
+    resources :planets, only: %i[index show create update destroy]
   end
 end

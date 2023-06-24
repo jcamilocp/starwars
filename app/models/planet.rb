@@ -1,6 +1,7 @@
 class Planet < ApplicationRecord
-  has_many :people, class_name: 'People'
-  has_and_belongs_to_many :films, join_table: 'Film_Planet', class_name: 'Film'
+  has_many :people, class_name: 'People', dependent: :destroy
+  has_many :film_planets, class_name: 'FilmPlanet'
+  has_many :films, through: :film_planets, class_name: 'Film'
 
   validates :name, presence: true, length: { maximum: 255 }
   validates :diameter, presence: true, length: { maximum: 255 }
