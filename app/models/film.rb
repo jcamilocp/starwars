@@ -1,5 +1,6 @@
 class Film < ApplicationRecord
-  has_and_belongs_to_many :people, join_table: 'Film_People', class_name: 'People'
+  has_many :film_people, class_name: 'FilmPeople'
+  has_many :people, through: :film_people, class_name: 'People'
   has_many :film_planets, class_name: 'FilmPlanet'
   has_many :planets, through: :film_planets, class_name: 'Planet'
 

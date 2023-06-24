@@ -1,5 +1,5 @@
 class V1::PlanetsController < ApplicationController
-  before_action :authenticate_user!, only: %i[index show]
+  before_action :authenticate_user!, only: %i[index show create update destroy]
 
   rescue_from Exception do |e|
     render json: { error: e.message }, status: :internal_server_error

@@ -19,7 +19,8 @@ RSpec.describe Film, type: :model do
     end
 
     it 'validates the relations' do
-      should have_and_belong_to_many(:people)
+      should have_many(:people)
+      should have_many(:film_people)
       should have_many(:planets)
       should have_many(:film_planets)
     end

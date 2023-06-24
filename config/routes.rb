@@ -8,5 +8,7 @@ Rails.application.routes.draw do
     end
 
     resources :planets, only: %i[index show create update destroy]
+    resources :people, only: %i[index show create update destroy]
+    resources :films, only: %i[index show create update destroy]
   end
 end

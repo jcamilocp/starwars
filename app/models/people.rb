@@ -1,6 +1,7 @@
 class People < ApplicationRecord
-  belongs_to :planet
-  has_and_belongs_to_many :films, join_table: 'Film_People', class_name: 'Film'
+  belongs_to :planet, class_name: 'Planet'
+  has_many :film_people, class_name: 'FilmPeople'
+  has_many :films, through: :film_people, class_name: 'Film'
 
   validates :name, presence: true, length: { maximum: 255 }
   validates :birth_year, presence: true, length: { maximum: 255 }
