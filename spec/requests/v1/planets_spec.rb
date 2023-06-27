@@ -164,6 +164,30 @@ RSpec.describe 'V1::Planets', type: :request do
     end
   end
 
+  describe 'GET /v1/planets/:id/people' do
+    let!(:planet1) { create(:planet) }
+    let!(:people1) { create(:people, planet_id: planet1.id) }
+    let!(:people2) { create(:people, planet_id: planet1.id) }
+
+    describe 'with auth' do
+      before { sign_in user }
+
+      it 'should list the people of the planet' do
+        get "/v1/planets/#{planet1.id}/people"
+        payload = JSON.parse(response.body)
+        expect(response).to have_http_status(:ok)
+        expect(payload['people'].size).to eq(2)
+      end
+    end
+
+    describe 'without auth' do
+      it 'should return an error' do
+        get "/v1/planets/#{planet1.id}/people"
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
   describe 'GET /v1/planets/:id/films' do
     let!(:planet1) { create(:planet) }
     let!(:film1) { create(:film) }
@@ -209,6 +233,34 @@ RSpec.describe 'V1::Planets', type: :request do
     describe 'without auth' do
       it 'should return an error' do
         post "/v1/planets/#{planet.id}/films", params: { film: { id: film.id } }
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe 'DELETE  /v1/planets/:id/films/:film_id' do
+    let!(:planet1) { create(:planet) }
+    let!(:film1) { create(:film) }
+    let!(:film2) { create(:film) }
+    let!(:filmplanet1) { create(:film_planet, planet_id: planet1.id, film_id: film1.id) }
+    let!(:filmplanet2) { create(:film_planet, planet_id: planet1.id, film_id: film2.id) }
+
+    describe 'with auth' do
+      before { sign_in user }
+
+      it 'should delete the films for the planet' do
+        expect(Planet.find(planet1.id).films.size).to eq(2)
+        delete "/v1/planets/#{planet1.id}/films/#{film2.id}"
+        # payload = JSON.parse(response.body)
+        expect(response).to have_http_status(:no_content)
+        expect(response.body).to be_empty
+        expect(Planet.find(planet1.id).films.size).to eq(1)
+      end
+    end
+
+    describe 'without auth' do
+      it 'should return an error' do
+        delete "/v1/planets/#{planet1.id}/films/#{film1.id}"
         expect(response).to have_http_status(:unauthorized)
       end
     end

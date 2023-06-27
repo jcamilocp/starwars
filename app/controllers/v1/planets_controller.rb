@@ -1,5 +1,5 @@
 class V1::PlanetsController < ApplicationController
-  before_action :authenticate_user!, only: %i[index show create update destroy]
+  before_action :authenticate_user!, only: %i[index show create update destroy people films add_film delete_film]
 
   rescue_from Exception do |e|
     render json: { error: e.message }, status: :internal_server_error
@@ -50,6 +50,13 @@ class V1::PlanetsController < ApplicationController
     render json: {}, status: :no_content
   end
 
+  # GET /v1/planets/:id/people
+  def people
+    @people = Planet.find(params[:id]).people
+
+    render json: { people: @people }, status: :ok
+  end
+
   # GET /v1/planets/:id/films
   def films
     @films = Planet.find(params[:id]).films
@@ -64,6 +71,15 @@ class V1::PlanetsController < ApplicationController
     @films.push(film)
 
     render json: { films: @films }, status: :created
+  end
+
+  # DELETE /v1/planets/:id/films/:film_id
+  def delete_film
+    film = Film.find(params[:film_id])
+    @films = Planet.find(params[:planet_id]).films
+    @films.delete(film)
+
+    render json: {}, status: :no_content
   end
 
   private

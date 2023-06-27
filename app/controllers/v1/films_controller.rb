@@ -1,5 +1,5 @@
 class V1::FilmsController < ApplicationController
-  before_action :authenticate_user!, only: %i[index show create update destroy]
+  before_action :authenticate_user!, only: %i[index show create update destroy planets add_planet delete_planet people add_people delete_people]
 
   rescue_from Exception do |e|
     render json: { error: e.message }, status: :internal_server_error
@@ -46,6 +46,56 @@ class V1::FilmsController < ApplicationController
   def destroy
     @film = Film.find(params[:id])
     @film.destroy
+
+    render json: {}, status: :no_content
+  end
+
+  # GET /v1/films/:id/planets
+  def planets
+    @planets = Film.find(params[:id]).planets
+
+    render json: { planets: @planets }, status: :ok
+  end
+
+  # POST /v1/films/:id/planets
+  def add_planet
+    planet = Planet.find(params[:planet][:id])
+    @planets = Film.find(params[:id]).planets
+    @planets.push(planet)
+
+    render json: { planets: @planets }, status: :created
+  end
+
+  # DELETE /v1/films/:film_id/planet/:film_id
+  def delete_planet
+    planet = Planet.find(params[:planet_id])
+    @planets = Film.find(params[:film_id]).planets
+    @planets.delete(planet)
+
+    render json: {}, status: :no_content
+  end
+
+  # GET /v1/films/:id/people
+  def people
+    @people = Film.find(params[:id]).people
+
+    render json: { people: @people }, status: :ok
+  end
+
+  # POST /v1/films/:id/people
+  def add_people
+    peep = People.find(params[:people][:id])
+    @people = Film.find(params[:id]).people
+    @people.push(peep)
+
+    render json: { people: @people }, status: :created
+  end
+
+  # DELETE /v1/films/:film_id/planet/:film_id
+  def delete_people
+    peep = People.find(params[:people_id])
+    @people = Film.find(params[:film_id]).people
+    @people.delete(peep)
 
     render json: {}, status: :no_content
   end

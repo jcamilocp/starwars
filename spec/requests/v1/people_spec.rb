@@ -168,4 +168,85 @@ RSpec.describe "V1::People", type: :request do
       end
     end
   end
+
+  describe 'GET /v1/people/:id/films' do
+    let!(:planet1) { create(:planet) }
+    let!(:people1) { create(:people, planet_id: planet1.id) }
+    let!(:film1) { create(:film) }
+    let!(:film2) { create(:film) }
+    let!(:filmpeople1) { create(:film_people, people_id: people1.id, film_id: film1.id) }
+    let!(:filmpeople2) { create(:film_people, people_id: people1.id, film_id: film2.id) }
+
+    describe 'with auth' do
+      before { sign_in user }
+
+      it 'should list the films of the people' do
+        get "/v1/people/#{people1.id}/films"
+        payload = JSON.parse(response.body)
+        expect(response).to have_http_status(:ok)
+        expect(payload['films'].size).to eq(2)
+      end
+    end
+
+    describe 'without auth' do
+      it 'should return an error' do
+        get "/v1/people/#{people1.id}/films"
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe 'POST /v1/people/:id/films' do
+    let!(:planet) { create(:planet) }
+    let!(:people) { create(:people, planet_id: planet.id) }
+    let!(:film) { create(:film) }
+
+    describe 'with auth' do
+      before { sign_in user }
+
+      it 'should create the films for the people' do
+        post "/v1/people/#{people.id}/films", params: { film: { id: film.id } }
+        payload = JSON.parse(response.body)
+        expect(response).to have_http_status(:created)
+        expect(payload['films'].size).to eq(1)
+        expect(People.find(people.id).films.size).to eq(1)
+      end
+    end
+
+    describe 'without auth' do
+      it 'should return an error' do
+        post "/v1/people/#{people.id}/films", params: { film: { id: film.id } }
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe 'DELETE  /v1/people/:people_id/films/:film_id' do
+    let!(:planet1) { create(:planet) }
+    let!(:people1) { create(:people, planet_id: planet1.id) }
+    let!(:film1) { create(:film) }
+    let!(:film2) { create(:film) }
+    let!(:filmpeople1) { create(:film_people, people_id: people1.id, film_id: film1.id) }
+    let!(:filmpeople2) { create(:film_people, people_id: people1.id, film_id: film2.id) }
+
+    describe 'with auth' do
+      before { sign_in user }
+
+      it 'should delete the films for the people' do
+        expect(People.find(people1.id).films.size).to eq(2)
+        delete "/v1/people/#{people1.id}/films/#{film2.id}"
+        # payload = JSON.parse(response.body)
+        expect(response).to have_http_status(:no_content)
+        expect(response.body).to be_empty
+        expect(People.find(people1.id).films.size).to eq(1)
+      end
+    end
+
+    describe 'without auth' do
+      it 'should return an error' do
+        delete "/v1/people/#{people1.id}/films/#{film1.id}"
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end
