@@ -50,6 +50,22 @@ class V1::PlanetsController < ApplicationController
     render json: {}, status: :no_content
   end
 
+  # GET /v1/planets/:id/films
+  def films
+    @films = Planet.find(params[:id]).films
+
+    render json: { films: @films }, status: :ok
+  end
+
+  # POST /v1/planets/:id/films
+  def add_film
+    film = Film.find(params[:film][:id])
+    @films = Planet.find(params[:id]).films
+    @films.push(film)
+
+    render json: { films: @films }, status: :created
+  end
+
   private
 
   def create_params

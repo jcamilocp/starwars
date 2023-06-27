@@ -1,26 +1,35 @@
 class V1::SessionsController < Devise::SessionsController
-  before_action :login_params, only: :create
-  before_action :find_user, only: :create
-
-  def create
-    if @user.valid_password?(login_params[:password])
-      sign_in 'user', @user
-      render json: { messages: 'Logged in Successfully', data: { user: @user } }, status: :ok
-    else
-      render json: { messages: 'Login Failed - Wrong Password', data: {} }, status: :unauthorized
-    end
-  end
+  include ActionController::MimeResponds
+  include RackSessionsFix
+  respond_to :json
 
   private
 
-  def login_params
-    params.require(:login).permit(:email, :password)
+  def respond_with(current_user, _opts = {})
+    render json: {
+      status: {
+        code: 200, message: 'Logged in successfully.',
+        data: { user: UserSerializer.new(current_user).serializable_hash[:data][:attributes] }
+      }
+    }, status: :ok
   end
 
-  def find_user
-    @user = User.find_for_database_authentication(email: login_params[:email])
-    return  @user if @user.present?
+  def respond_to_on_destroy
+    if request.headers['Authorization'].present?
+      jwt_payload = JWT.decode(request.headers['Authorization'].split(' ').last, Rails.application.credentials.devise_jwt_secret_key!).first
+      current_user = User.find(jwt_payload['sub'])
+    end
 
-    render json: { messages: 'User not found', data: {} }, status: :bad_request
+    if current_user
+      render json: {
+        status: 200,
+        message: 'Logged out successfully.'
+      }, status: :ok
+    else
+      render json: {
+        status: 401,
+        message: "Couldn't find an active session."
+      }, status: :unauthorized
+    end
   end
 end

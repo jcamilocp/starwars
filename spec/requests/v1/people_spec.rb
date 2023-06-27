@@ -86,7 +86,6 @@ RSpec.describe "V1::People", type: :request do
         req_payload[:people][:planet_id] = planet.id
         post '/v1/people', params: req_payload
         payload = JSON.parse(response.body)
-        puts payload
         expect(payload).to_not be_empty
         expect(response).to have_http_status(:created)
         expect(payload['people']['id']).to_not be_nil

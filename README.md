@@ -16,22 +16,18 @@ Then, you can seed the data:
 
 ``sqlite3 db/development.sqlite3 < db/dump/seed.sql``
 
-Things you may want to cover:
+Then, run the migrations:
 
-* Ruby version
+``rails db:migrate``
 
-* System dependencies
+## Tests
+Before running tests, execute:
 
-* Configuration
+``sqlite3 db/test.sqlite3 < db/dump/db.sql``
 
-* Database creation
+And then, run the migrations:
 
-* Database initialization
+``RAILS_ENV=test rails db:migrate``
 
-* How to run the test suite
+To run the tests, you can use the command ``bundle exec rspec``. This project counts with models and controllers tests.
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...

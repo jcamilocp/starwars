@@ -156,7 +156,7 @@ RSpec.describe "V1::Films", type: :request do
 
     describe 'without auth' do
       it 'should return an error' do
-        delete "/v1/films/#{films[0].id}", params: req_payload
+        delete "/v1/films/#{films[0].id}"
         expect(response).to have_http_status(:unauthorized)
       end
     end
