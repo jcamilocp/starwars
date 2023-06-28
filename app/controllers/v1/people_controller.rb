@@ -24,7 +24,7 @@ class V1::PeopleController < ApplicationController
   def show
     @people = People.find(params[:id])
 
-    render json: { people: @people }, status: :ok
+    render json: { people: PeopleSerializer.new(@people).serializable_hash }, status: :ok
   end
 
   # POST /v1/people
