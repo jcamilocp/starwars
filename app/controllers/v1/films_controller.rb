@@ -24,7 +24,7 @@ class V1::FilmsController < ApplicationController
   def show
     @film = Film.find(params[:id])
 
-    render json: { film: @film }, status: :ok
+    render json: { film: FilmSerializer.new(@film).serializable_hash }, status: :ok
   end
 
   # POST /v1/films

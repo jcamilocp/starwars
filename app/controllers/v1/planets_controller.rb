@@ -24,7 +24,7 @@ class V1::PlanetsController < ApplicationController
   def show
     @planet = Planet.find(params[:id])
 
-    render json: { planet: @planet }, status: :ok
+    render json: { planet: PlanetSerializer.new(@planet).serializable_hash }, status: :ok
   end
 
   # POST /v1/planets
